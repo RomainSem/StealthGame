@@ -3,36 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+//RequireComponent(typeof(Rigidbody));
 public class PlayerMovements : MonoBehaviour
 {
     #region Expose
-    [SerializeField] float _joggingSpeed = 2;
-    [SerializeField] float _runningSpeed = 3;
-    [SerializeField] float _sneakingSpeed = 1;
-    
+    [SerializeField] float _joggingSpeed = 5;
+    [SerializeField] float _runningSpeed = 8;
+    [SerializeField] float _sneakingSpeed = 3;
+    [SerializeField] float _rotationSpeed = 3;
+
     #endregion
 
     #region Unity Lyfecycle
 
     private void Awake()
     {
-        _mainCamera = Camera.main;
         _rgdbody = GetComponent<Rigidbody>();
     }
 
     void Start()
     {
-
+        _mainCamera = Camera.main;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
 
+        _direction = _mainCamera.transform.forward * Input.GetAxis("Vertical") + _mainCamera.transform.right * Input.GetAxis("Horizontal");
+        _direction *= _joggingSpeed;
     }
 
     private void FixedUpdate()
     {
-        Move();
+        // Fait une chute normale
+        _direction.y = _rgdbody.velocity.y;
+
+        RotateTowardsCamera();
+        _rgdbody.velocity = _direction;
     }
 
 
@@ -40,26 +48,23 @@ public class PlayerMovements : MonoBehaviour
 
     #region Methods
 
-    private void Move()
+    private void RotateTowardsCamera()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        // Calculer la direction globale en fonction de la direction de la caméra
-        Vector3 cameraForward = _mainCamera.transform.TransformDirection(Vector3.forward);
-        cameraForward.y = 0f;
-        Vector3 cameraRight = _mainCamera.transform.TransformDirection(Vector3.right);
-        cameraRight.y = 0f;
-        _direction = cameraForward * vertical + cameraRight * horizontal;
-        _direction.Normalize();
+        if (_direction.magnitude > 0.1f)
+        {
+            Vector3 lookDirection = _mainCamera.transform.forward;
+            lookDirection.y = 0;
 
-        _rgdbody.AddForce(_direction * _joggingSpeed, ForceMode.Force);
+            Quaternion rotation = Quaternion.LookRotation(lookDirection);
+            _rgdbody.MoveRotation(rotation);
+        }
     }
 
     #endregion
 
     #region Private & Protected
     Camera _mainCamera;
-    Vector3 _direction;
+    Vector3 _direction = new Vector3();
     Rigidbody _rgdbody;
 
     #endregion
