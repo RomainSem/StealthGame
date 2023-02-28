@@ -8,15 +8,18 @@ public class PlayerMovements : MonoBehaviour
 {
     #region Expose
     [Header("Movements")]
-    [SerializeField] float _joggingSpeed = 5;
-    [SerializeField] float _runningSpeed = 8;
-    [SerializeField] float _sneakingSpeed = 3;
+    [SerializeField] float _joggingSpeed = 7;
+    [SerializeField] float _runningSpeed = 0.5f;
+    [SerializeField] float _sneakingSpeed = 2;
     [SerializeField] float _rotationSpeed = 5;
     [SerializeField] float _jumpForce = 5;
 
     [Header("Floor Detection")]
     [SerializeField] LayerMask _groundMask;
     [SerializeField] Vector3 _boxDimension;
+    [SerializeField] Transform _groundChecker;
+    [SerializeField] float _floorYOffeset = 1f;
+
 
     #endregion
 
@@ -25,6 +28,7 @@ public class PlayerMovements : MonoBehaviour
     private void Awake()
     {
         _rgdbody = GetComponent<Rigidbody>();
+        _floorDetector = GetComponentInChildren<FloorDetector>();
     }
 
     void Start()
@@ -36,33 +40,83 @@ public class PlayerMovements : MonoBehaviour
 
     void Update()
     {
+        Move();
         Jump();
-        _direction = _mainCamera.transform.forward * Input.GetAxis("Vertical") + _mainCamera.transform.right * Input.GetAxis("Horizontal");
-        _direction *= _joggingSpeed;
-        Physics.OverlapBox(_groundChecker.position, _boxDimension, Quaternion.identity, _groundMask);
+        Run();
+        Sneak();
+
+        Collider[] groundColliders = Physics.OverlapBox(_groundChecker.position, _boxDimension, Quaternion.identity, _groundMask);
+        _isGrounded = groundColliders.Length > 0;
+
     }
 
     private void FixedUpdate()
     {
-        if (_isJumping)
+        if (_isGrounded)
         {
-            _direction.y = _jumpForce;
-            _isJumping = false;
+            StickToGround();
+
+            if (_isJumping)
+            {
+                _isGrounded = false;
+                _direction.y = _jumpForce;
+                _isJumping = false;
+            }
         }
         else
         {
-            // Fait une chute normale
+            //Ici soit on saute soit on tombe
             _direction.y = _rgdbody.velocity.y;
         }
-
-        RotateTowardsCamera();
         _rgdbody.velocity = _direction;
+        RotateTowardsCamera();
     }
 
 
     #endregion
 
     #region Methods
+
+    private void Move()
+    {
+        _direction = _mainCamera.transform.forward * Input.GetAxis("Vertical") + _mainCamera.transform.right * Input.GetAxis("Horizontal");
+        _direction *= _joggingSpeed;
+        _direction.y = 0; // Pour ne pas bouger en Y par rapport à la caméra
+    }
+
+    private void Run()
+    {
+        if (Input.GetButton("Fire3"))
+        {
+            _direction *= _runningSpeed;
+        }
+    }
+
+    private void Sneak()
+    {
+        if (Input.GetButton("CTRL"))
+        {
+            if (_isSneaking == false)
+            {
+                _isSneaking = true;
+                Debug.Log("Sneaking");
+                _direction *= _sneakingSpeed;
+            }
+            else
+            {
+                _isSneaking = false;
+            }
+
+        }
+    }
+
+    private void Jump()
+    {
+        if (Input.GetButtonDown("Jump"))
+        {
+            _isJumping = true;
+        }
+    }
 
     private void RotateTowardsCamera()
     {
@@ -77,22 +131,33 @@ public class PlayerMovements : MonoBehaviour
         }
     }
 
-    private void Jump()
+    private void StickToGround()
     {
-        if (Input.GetButtonDown("Jump"))
-        {
-            _isJumping = true;
-        }
+        Vector3 averagePosition = _floorDetector.AverageHeight();
+        Vector3 newPosition = new Vector3(_rgdbody.position.x, averagePosition.y + _floorYOffeset, _rgdbody.position.z);
+
+        //_rgdbody.MovePosition(newPosition);
+        transform.position = newPosition;
+        _direction.y = 0;
+        //_rgdbody.position = new Vector3(_rgdbody.position.x, 0, _rgdbody.position.z) ;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireCube(_groundChecker.position, _boxDimension * 2);
     }
 
     #endregion
 
     #region Private & Protected
     Camera _mainCamera;
-    Vector3 _direction = new Vector3();
     Rigidbody _rgdbody;
-    bool _isJumping = false;
-    Transform _groundChecker;
+    FloorDetector _floorDetector;
+    Vector3 _direction = new Vector3();
+    bool _isJumping;
+    public bool _isGrounded;
+    bool _isSneaking;
 
     #endregion
 }
