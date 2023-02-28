@@ -68,6 +68,7 @@ public class PlayerMovements : MonoBehaviour
             //Ici soit on saute soit on tombe
             _direction.y = _rgdbody.velocity.y;
         }
+
         _rgdbody.velocity = _direction;
         RotateTowardsCamera();
     }
