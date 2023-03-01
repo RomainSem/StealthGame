@@ -89,7 +89,7 @@ public class PlayerMovements : MonoBehaviour
     #region Methods
 
     private void Move()
-    {
+    { 
         _direction = _mainCamera.transform.forward * Input.GetAxis("Vertical") + _mainCamera.transform.right * Input.GetAxis("Horizontal");
         _direction *= _joggingSpeed;
         _direction.y = 0; // Pour ne pas bouger en Y par rapport à la caméra
