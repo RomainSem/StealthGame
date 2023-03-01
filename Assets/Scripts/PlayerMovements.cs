@@ -12,7 +12,8 @@ public class PlayerMovements : MonoBehaviour
     [SerializeField] float _runningSpeed = 0.5f;
     [SerializeField] float _sneakingSpeed = 2;
     [SerializeField] float _rotationSpeed = 5;
-    [SerializeField] float _jumpForce = 5;
+    [SerializeField] float _jumpForce = 6;
+    [SerializeField] GameObject _3rdCamera;
 
     [Header("Floor Detection")]
     [SerializeField] LayerMask _groundMask;
@@ -44,6 +45,15 @@ public class PlayerMovements : MonoBehaviour
         Jump();
         Run();
         Sneak();
+
+        if (_isRunning)
+        {
+            _3rdCamera.SetActive(false);
+        }
+        else
+        {
+            _3rdCamera.SetActive(true);
+        }
 
         Collider[] groundColliders = Physics.OverlapBox(_groundChecker.position, _boxDimension, Quaternion.identity, _groundMask);
         _isGrounded = groundColliders.Length > 0;
@@ -89,7 +99,12 @@ public class PlayerMovements : MonoBehaviour
     {
         if (Input.GetButton("Fire3"))
         {
+            _isRunning = true;
             _direction *= _runningSpeed;
+        }
+        else
+        {
+            _isRunning = false;
         }
     }
 
@@ -113,7 +128,7 @@ public class PlayerMovements : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && _isGrounded)
         {
             _isJumping = true;
         }
@@ -156,9 +171,10 @@ public class PlayerMovements : MonoBehaviour
     Rigidbody _rgdbody;
     FloorDetector _floorDetector;
     Vector3 _direction = new Vector3();
+    bool _isRunning;
     bool _isJumping;
-    public bool _isGrounded;
     bool _isSneaking;
+    public bool _isGrounded;
 
     #endregion
 }
