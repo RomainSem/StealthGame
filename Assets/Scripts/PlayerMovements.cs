@@ -120,7 +120,7 @@ public class PlayerMovements : MonoBehaviour
 
     private void Sneak()
     {
-        if (Input.GetButton("CTRL"))
+        if (Input.GetButtonDown("CTRL"))
         {
             if (IsSneaking == false)
             {
