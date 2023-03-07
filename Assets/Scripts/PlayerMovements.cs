@@ -9,9 +9,9 @@ public class PlayerMovements : MonoBehaviour
     #region Expose
     [Header("Movements")]
     [SerializeField] float _joggingSpeed = 7;
-    [SerializeField] float _runningSpeed = 0.5f;
-    [SerializeField] float _sneakingSpeed = 2;
-    [SerializeField] float _rotationSpeed = 5;
+    [SerializeField] float _runningSpeed = 2f;
+    [SerializeField] float _sneakingSpeed = 0.5f;
+    //[SerializeField] float _rotationSpeed = 5;
     [SerializeField] float _jumpForce = 6;
     [SerializeField] GameObject _3rdCamera;
 
@@ -20,6 +20,9 @@ public class PlayerMovements : MonoBehaviour
     [SerializeField] Vector3 _boxDimension;
     [SerializeField] Transform _groundChecker;
     [SerializeField] float _floorYOffeset = 1f;
+
+    [Header("Slope handling")]
+    [SerializeField] private float _maxSlopeAngle = 40f;
 
 
     #endregion
@@ -46,37 +49,44 @@ public class PlayerMovements : MonoBehaviour
         Run();
         Sneak();
 
-        if (_isRunning)
-        {
-            _3rdCamera.SetActive(false);
-        }
-        else
-        {
-            _3rdCamera.SetActive(true);
-        }
+        //if (_isRunning)
+        //{
+        //    _3rdCamera.SetActive(false);
+        //}
+        //else
+        //{
+        //    _3rdCamera.SetActive(true);
+        //}
 
         Collider[] groundColliders = Physics.OverlapBox(_groundChecker.position, _boxDimension, Quaternion.identity, _groundMask);
-        _isGrounded = groundColliders.Length > 0;
+        IsGrounded = groundColliders.Length > 0;
 
     }
 
     private void FixedUpdate()
     {
-        if (_isGrounded)
+        if (IsGrounded)
         {
             StickToGround();
 
-            if (_isJumping)
+            if (IsJumping)
             {
-                _isGrounded = false;
+                IsGrounded = false;
                 _direction.y = _jumpForce;
-                _isJumping = false;
+                IsJumping = false;
             }
         }
         else
         {
             //Ici soit on saute soit on tombe
             _direction.y = _rgdbody.velocity.y;
+        }
+        if (SlopeAngle() > _maxSlopeAngle)
+        {
+            Debug.Log("Ne doit pas avancer");   // Mais quand même déjà un peu sur la pente
+            Vector3 localDirection = transform.InverseTransformDirection(_direction);   //Passe du gloabal au local
+            if (localDirection.z > 0) localDirection.z = 0;   //Pas le droit d'avancer
+            Direction = transform.TransformDirection(localDirection);  //Repasse la direction en global
         }
 
         _rgdbody.velocity = _direction;
@@ -90,8 +100,8 @@ public class PlayerMovements : MonoBehaviour
 
     private void Move()
     { 
-        _direction = _mainCamera.transform.forward * Input.GetAxis("Vertical") + _mainCamera.transform.right * Input.GetAxis("Horizontal");
-        _direction *= _joggingSpeed;
+        Direction = _mainCamera.transform.forward * Input.GetAxis("Vertical") + _mainCamera.transform.right * Input.GetAxis("Horizontal");
+        Direction *= _joggingSpeed;
         _direction.y = 0; // Pour ne pas bouger en Y par rapport à la caméra
     }
 
@@ -99,12 +109,12 @@ public class PlayerMovements : MonoBehaviour
     {
         if (Input.GetButton("Fire3"))
         {
-            _isRunning = true;
-            _direction *= _runningSpeed;
+            IsRunning = true;
+            Direction *= _runningSpeed;
         }
         else
         {
-            _isRunning = false;
+            IsRunning = false;
         }
     }
 
@@ -112,15 +122,15 @@ public class PlayerMovements : MonoBehaviour
     {
         if (Input.GetButton("CTRL"))
         {
-            if (_isSneaking == false)
+            if (IsSneaking == false)
             {
-                _isSneaking = true;
+                IsSneaking = true;
                 Debug.Log("Sneaking");
-                _direction *= _sneakingSpeed;
+                Direction *= _sneakingSpeed;
             }
             else
             {
-                _isSneaking = false;
+                IsSneaking = false;
             }
 
         }
@@ -128,9 +138,9 @@ public class PlayerMovements : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetButtonDown("Jump") && _isGrounded)
+        if (Input.GetButtonDown("Jump") && IsGrounded)
         {
-            _isJumping = true;
+            IsJumping = true;
         }
     }
 
@@ -158,6 +168,18 @@ public class PlayerMovements : MonoBehaviour
         //_rgdbody.position = new Vector3(_rgdbody.position.x, 0, _rgdbody.position.z) ;
     }
 
+    private float SlopeAngle()
+    {
+        Vector3 startingpoint = new Vector3(transform.position.x, transform.position.y, transform.position.z + 0.5f);
+        Debug.DrawRay(startingpoint, Vector3.down);
+        if (Physics.Raycast(startingpoint, Vector3.down, out _slopeHit))
+        {
+            float angle = Vector3.Angle(Vector3.up, _slopeHit.normal);
+            return angle;
+        }
+        return 370;
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.magenta;
@@ -174,7 +196,14 @@ public class PlayerMovements : MonoBehaviour
     bool _isRunning;
     bool _isJumping;
     bool _isSneaking;
-    public bool _isGrounded;
+    private bool isGrounded;
+    private RaycastHit _slopeHit;
+
+    public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
+    public Vector3 Direction { get => _direction; set => _direction = value; }
+    public bool IsJumping { get => _isJumping; set => _isJumping = value; }
+    public bool IsSneaking { get => _isSneaking; set => _isSneaking = value; }
+    public bool IsRunning { get => _isRunning; set => _isRunning = value; }
 
     #endregion
 }

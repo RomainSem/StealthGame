@@ -47,8 +47,8 @@ public class FloorDetector : MonoBehaviour
     {
         int hitCount = 0;
         Vector3 combinedPosition = Vector3.zero;
-
         RaycastHit hit;
+
         foreach (Transform o in _rayOrigins)
         {
             if (Physics.Raycast(o.position, Vector3.down, out hit, _rayLength, _groundMask))
