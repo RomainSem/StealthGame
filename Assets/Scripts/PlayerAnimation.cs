@@ -21,18 +21,24 @@ public class PlayerAnimation : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()
     {
         _currentSpeed = _rb.velocity.magnitude;
+        if (_currentSpeed < 0.3f)
+        {
+            _currentSpeed = 0f;
+            _localDirection.y = 0;
+            _localDirection.x = 0;
+        }
         AnimationToPlay();
     }
 
     private void FixedUpdate()
     {
-        
+
     }
 
     #endregion
@@ -41,40 +47,15 @@ public class PlayerAnimation : MonoBehaviour
 
     private void AnimationToPlay()
     {
-        //if (_controller.IsJumping == true)
-        //{
-            _animator.SetBool("isJumping", _controller.IsJumping);
-            //_animator.SetBool("isGrounded", false);
-        //}
-        //if (_controller.IsGrounded == true)
-        //{
-            //_animator.SetBool("isJumping", false);
-            _animator.SetBool("isGrounded", _controller.IsGrounded);
-            //_isFalling = false;
-        //}
-        //if (_currentSpeed > 0.3f)
-        //{
-            _localDirection = transform.InverseTransformDirection(_controller.Direction);   //Passe du gloabal au local
-            _animator.SetFloat("moveSpeed", _currentSpeed);
-            _animator.SetFloat("speedX", _localDirection.x);
-            _animator.SetFloat("speedY", _localDirection.z);
-            _animator.SetBool("isSneaking", _controller.IsSneaking);
-        //}
-        if (_currentSpeed < 0.3f)
-        {
-            _currentSpeed = 0f;
-            _localDirection.y = 0;
-            _localDirection.x = 0;
-        }
-        //if (_controller.IsGrounded == false)
-        //{
-        //    _isFalling = true;
-        //}
-        //if (_isFalling == true)
-        //{
-        //    _animator.SetBool("isJumping", false);
-        //    _animator.SetBool("isGrounded", false);
-        //}
+        _localDirection = transform.InverseTransformDirection(_controller.Direction);   //Passe du gloabal au local
+        _animator.SetBool("isJumping", _controller.IsJumping);
+        _animator.SetBool("isGrounded", _controller.IsGrounded);
+        _animator.SetFloat("moveSpeed", _currentSpeed);
+        _animator.SetFloat("speedX", _localDirection.x);
+        _animator.SetFloat("speedY", _localDirection.z);
+        _animator.SetBool("isSneaking", _controller.IsSneaking);
+        
+
     }
 
     #endregion
@@ -83,7 +64,6 @@ public class PlayerAnimation : MonoBehaviour
 
     private float _currentSpeed;
     private Rigidbody _rb;
-    //private bool _isFalling;
     Vector3 _localDirection = new Vector3();
 
     #endregion
