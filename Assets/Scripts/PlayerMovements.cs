@@ -107,7 +107,7 @@ public class PlayerMovements : MonoBehaviour
 
     private void Run()
     {
-        if (Input.GetButton("Fire3"))
+        if (Input.GetButton("Run"))
         {
             IsRunning = true;
             Direction *= _runningSpeed;
@@ -120,7 +120,7 @@ public class PlayerMovements : MonoBehaviour
 
     private void Sneak()
     {
-        if (Input.GetButtonDown("CTRL"))
+        if (Input.GetButtonDown("Sneak"))
         {
             if (IsSneaking == false)
             {
