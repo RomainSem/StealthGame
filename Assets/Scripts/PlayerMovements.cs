@@ -9,8 +9,8 @@ public class PlayerMovements : MonoBehaviour
     #region Expose
     [Header("Movements")]
     [SerializeField] float _joggingSpeed = 7;
-    [SerializeField] float _runningSpeed = 1.5f;
-    [SerializeField] float _sneakingSpeed = 2f;
+    [SerializeField] float _runningSpeed = 1.3f;
+    [SerializeField] float _sneakingSpeed = 3f;
     [SerializeField] float _jumpForce = 6;
     [SerializeField] GameObject _3rdCamera;
 
@@ -43,10 +43,11 @@ public class PlayerMovements : MonoBehaviour
 
     void Update()
     {
-        Move();
+        DirectionFromInput();
         Jump();
         Run();
         Sneak();
+        Speed();
 
         //if (_isRunning)
         //{
@@ -87,7 +88,6 @@ public class PlayerMovements : MonoBehaviour
             if (localDirection.z > 0) localDirection.z = 0;   //Pas le droit d'avancer
             Direction = transform.TransformDirection(localDirection);  //Repasse la direction en global
         }
-
         _rgdbody.velocity = _direction;
         RotateTowardsCamera();
     }
@@ -97,10 +97,10 @@ public class PlayerMovements : MonoBehaviour
 
     #region Methods
 
-    private void Move()
+    private void DirectionFromInput()
     { 
         Direction = _mainCamera.transform.forward * Input.GetAxis("Vertical") + _mainCamera.transform.right * Input.GetAxis("Horizontal");
-        Direction *= _joggingSpeed;
+        Direction.Normalize();
         _direction.y = 0; // Pour ne pas bouger en Y par rapport à la caméra
     }
 
@@ -109,7 +109,10 @@ public class PlayerMovements : MonoBehaviour
         if (Input.GetButton("Run"))
         {
             IsRunning = true;
-            Direction *= _runningSpeed;
+            if (IsSneaking)
+            {
+                IsRunning = false;
+            }
         }
         else
         {
@@ -125,7 +128,8 @@ public class PlayerMovements : MonoBehaviour
             {
                 IsSneaking = true;
                 Debug.Log("Sneaking");
-                Direction /= _sneakingSpeed;
+                //Direction = _mainCamera.transform.forward * Input.GetAxis("Vertical") + _mainCamera.transform.right * Input.GetAxis("Horizontal");
+                //Direction *= _sneakingSpeed;
             }
             else
             {
@@ -177,6 +181,22 @@ public class PlayerMovements : MonoBehaviour
             return angle;
         }
         return 370;
+    }
+
+    private void Speed()
+    {
+        if (IsRunning)
+        {
+            Direction *= _runningSpeed;
+        }
+        if (IsSneaking)
+        {
+            Direction *= _sneakingSpeed;
+        }
+        else
+        {
+            Direction *= _joggingSpeed;
+        }
     }
 
     private void OnDrawGizmos()

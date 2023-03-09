@@ -54,6 +54,7 @@ public class PlayerAnimation : MonoBehaviour
         _animator.SetFloat("speedX", _localDirection.x);
         _animator.SetFloat("speedY", _localDirection.z);
         _animator.SetBool("isSneaking", _controller.IsSneaking);
+        _animator.SetBool("isRunning", _controller.IsRunning);
     }
 
     #endregion
