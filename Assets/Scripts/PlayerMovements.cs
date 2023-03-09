@@ -9,9 +9,8 @@ public class PlayerMovements : MonoBehaviour
     #region Expose
     [Header("Movements")]
     [SerializeField] float _joggingSpeed = 7;
-    [SerializeField] float _runningSpeed = 2f;
-    [SerializeField] float _sneakingSpeed = 0.5f;
-    //[SerializeField] float _rotationSpeed = 5;
+    [SerializeField] float _runningSpeed = 1.5f;
+    [SerializeField] float _sneakingSpeed = 2f;
     [SerializeField] float _jumpForce = 6;
     [SerializeField] GameObject _3rdCamera;
 
@@ -126,7 +125,7 @@ public class PlayerMovements : MonoBehaviour
             {
                 IsSneaking = true;
                 Debug.Log("Sneaking");
-                Direction *= _sneakingSpeed;
+                Direction /= _sneakingSpeed;
             }
             else
             {
@@ -162,8 +161,8 @@ public class PlayerMovements : MonoBehaviour
         Vector3 averagePosition = _floorDetector.AverageHeight();
         Vector3 newPosition = new Vector3(_rgdbody.position.x, averagePosition.y + _floorYOffeset, _rgdbody.position.z);
 
-        //_rgdbody.MovePosition(newPosition);
-        transform.position = newPosition;
+        _rgdbody.MovePosition(newPosition);
+        //transform.position = newPosition;
         _direction.y = 0;
         //_rgdbody.position = new Vector3(_rgdbody.position.x, 0, _rgdbody.position.z) ;
     }
