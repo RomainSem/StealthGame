@@ -44,19 +44,13 @@ public class PlayerMovements : MonoBehaviour
     void Update()
     {
         DirectionFromInput();
-        Jump();
+        if (Input.GetButtonDown("Jump") && IsGrounded)
+        {
+            IsJumping = true;
+        }
         Run();
         Sneak();
         Speed();
-
-        //if (_isRunning)
-        //{
-        //    _3rdCamera.SetActive(false);
-        //}
-        //else
-        //{
-        //    _3rdCamera.SetActive(true);
-        //}
 
         Collider[] groundColliders = Physics.OverlapBox(_groundChecker.position, _boxDimension, Quaternion.identity, _groundMask);
         IsGrounded = groundColliders.Length > 0;
@@ -68,12 +62,9 @@ public class PlayerMovements : MonoBehaviour
         if (IsGrounded)
         {
             StickToGround();
-
-            if (IsJumping)
+            if (_isJumping)
             {
-                IsGrounded = false;
-                _direction.y = _jumpForce;
-                IsJumping = false;
+                Jump();
             }
         }
         else
@@ -98,7 +89,7 @@ public class PlayerMovements : MonoBehaviour
     #region Methods
 
     private void DirectionFromInput()
-    { 
+    {
         Direction = _mainCamera.transform.forward * Input.GetAxis("Vertical") + _mainCamera.transform.right * Input.GetAxis("Horizontal");
         Direction.Normalize();
         _direction.y = 0; // Pour ne pas bouger en Y par rapport à la caméra
@@ -141,10 +132,9 @@ public class PlayerMovements : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetButtonDown("Jump") && IsGrounded)
-        {
-            IsJumping = true;
-        }
+        IsGrounded = false;
+        _direction.y = _jumpForce;
+        IsJumping = false;
     }
 
     private void RotateTowardsCamera()

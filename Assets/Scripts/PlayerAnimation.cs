@@ -32,6 +32,7 @@ public class PlayerAnimation : MonoBehaviour
             _currentSpeed = 0f;
             _localDirection.y = 0;
             _localDirection.x = 0;
+            _controller.IsRunning = false;
         }
         AnimationToPlay();
     }
