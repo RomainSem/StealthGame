@@ -20,12 +20,20 @@ public class MoveAgent : MonoBehaviour
 
     void Start()
     {
-        _agent.SetDestination(_target.position);
     }
 
     void Update()
     {
-        
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hitInfo))
+            {
+                _agent.SetDestination(hitInfo.point);
+
+            }
+        }
     }
 
     private void FixedUpdate()
