@@ -7,7 +7,7 @@ public class MoveAgent : MonoBehaviour
 {
     #region Exposed
 
-    [SerializeField] Transform _target;
+    //[SerializeField] Transform _target;
 
     #endregion
 
@@ -15,7 +15,7 @@ public class MoveAgent : MonoBehaviour
 
     private void Awake()
     {
-        _agent = GetComponent<NavMeshAgent>();
+       // _agent = GetComponent<NavMeshAgent>();
     }
 
     void Start()
@@ -24,16 +24,16 @@ public class MoveAgent : MonoBehaviour
 
     void Update()
     {
+        // Dirige l'agent vers le point cliqué
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //    if (Physics.Raycast(ray, out RaycastHit hitInfo))
+        //    {
+        //        _agent.SetDestination(hitInfo.point);
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hitInfo))
-            {
-                _agent.SetDestination(hitInfo.point);
-
-            }
-        }
+        //    }
+        //}
     }
 
     private void FixedUpdate()
@@ -49,7 +49,7 @@ public class MoveAgent : MonoBehaviour
 
     #region Private & Protected
 
-    NavMeshAgent _agent;
+    //NavMeshAgent _agent;
 
     #endregion
 }
