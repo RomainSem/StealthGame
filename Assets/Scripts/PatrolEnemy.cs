@@ -16,6 +16,9 @@ public class PatrolEnemy : MonoBehaviour
 
     private void Awake()
     {
+        _player = GameObject.FindGameObjectWithTag("Player");
+        _playerDetected = _player.GetComponent<PlayerDetected>();
+        _playerTransform = _player.GetComponent<Transform>();
         _agent = GetComponent<NavMeshAgent>();
     }
 
@@ -26,23 +29,7 @@ public class PatrolEnemy : MonoBehaviour
 
     void Update()
     {
-        if (_backAndForth)
-        {
-
-            if (_isGoing)
-            {
-                GoToNextPoint();
-            }
-            else
-            {
-                GoToPreviousPoint();
-            }
-        }
-        else
-        {
-            GoToNextPoint();
-        }
-
+        Destination();
     }
 
     private void FixedUpdate()
@@ -53,6 +40,35 @@ public class PatrolEnemy : MonoBehaviour
     #endregion
 
     #region Methods
+
+    private void Destination()
+    {
+        if (_playerDetected.IsPlayerVisible)
+        {
+            Vector3 _playerPosition = _playerTransform.position;
+            _agent.SetDestination(_playerPosition);
+            Debug.Log("JE ME DIRIGE VERS PLAYER");
+        }
+        else
+        {
+            if (_backAndForth)
+            {
+
+                if (_isGoing)
+                {
+                    GoToNextPoint();
+                }
+                else
+                {
+                    GoToPreviousPoint();
+                }
+            }
+            else
+            {
+                GoToNextPoint();
+            }
+        }
+    }
 
     private void GoToNextPoint()
     {
@@ -97,13 +113,18 @@ public class PatrolEnemy : MonoBehaviour
         }
     }
 
+
+
     #endregion
 
     #region Private & Protected
 
     NavMeshAgent _agent;
     int _currentPoint = 0;
-    bool _isGoing = false;
+    bool _isGoing;
+    PlayerDetected _playerDetected;
+    Transform _playerTransform;
+    GameObject _player;
 
     #endregion
 }
