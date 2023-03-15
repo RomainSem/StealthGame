@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -32,11 +30,6 @@ public class PatrolEnemy : MonoBehaviour
         Destination();
     }
 
-    private void FixedUpdate()
-    {
-
-    }
-
     #endregion
 
     #region Methods
@@ -45,18 +38,24 @@ public class PatrolEnemy : MonoBehaviour
     {
         if (_playerDetected.IsPlayerVisible)
         {
-            Vector3 _playerPosition = _playerTransform.position;
-            _agent.SetDestination(_playerPosition);
-            if (Vector3.Distance(transform.position, _playerPosition) <= 1f)
+            PlayerGetsDetected();
+        }
+        if (_isMovingToShadow)
+        {
+            if (_playerDetected.Shadow != null)
             {
-                _agent.ResetPath();
+                if (Vector3.Distance(transform.position, _playerDetected.Shadow.transform.position) <= 2f)
+                {
+                    Destroy(_playerDetected.Shadow);
+                    _agent.ResetPath();
+                    _isMovingToShadow = false;
+                }
             }
         }
         else
         {
             if (_backAndForth)
             {
-
                 if (_isGoing)
                 {
                     GoToNextPoint();
@@ -71,6 +70,13 @@ public class PatrolEnemy : MonoBehaviour
                 GoToNextPoint();
             }
         }
+    }
+
+    private void PlayerGetsDetected()
+    {
+        Vector3 _playerPosition = _playerTransform.position;
+        _agent.SetDestination(_playerPosition);
+        _isMovingToShadow = true;
     }
 
     private void GoToNextPoint()
@@ -116,8 +122,6 @@ public class PatrolEnemy : MonoBehaviour
         }
     }
 
-
-
     #endregion
 
     #region Private & Protected
@@ -125,6 +129,7 @@ public class PatrolEnemy : MonoBehaviour
     NavMeshAgent _agent;
     int _currentPoint = 0;
     bool _isGoing;
+    bool _isMovingToShadow = false;
     PlayerDetected _playerDetected;
     Transform _playerTransform;
     GameObject _player;

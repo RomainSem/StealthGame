@@ -6,7 +6,7 @@ public class PlayerDetected : MonoBehaviour
 {
     #region Exposed
 
-    
+    [SerializeField] GameObject _playerShadow;
 
     #endregion
 
@@ -14,21 +14,22 @@ public class PlayerDetected : MonoBehaviour
 
     private void Awake()
     {
+
     }
 
     void Start()
     {
-        
+
     }
 
     void Update()
     {
-        
+
     }
 
     private void FixedUpdate()
     {
-        
+
     }
 
     #endregion
@@ -47,17 +48,26 @@ public class PlayerDetected : MonoBehaviour
     {
         if (other.gameObject.tag == "CameraCone")
         {
+            if (Shadow != null)
+            {
+                Destroy(Shadow);
+            }
+            Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
+            // _patrolEnemy.SetInterest(Shadow);
             IsPlayerVisible = false;
         }
     }
+
 
     #endregion
 
     #region Private & Protected
 
     bool _isPlayerVisible;
+    GameObject _shadow;
 
     public bool IsPlayerVisible { get => _isPlayerVisible; set => _isPlayerVisible = value; }
+    public GameObject Shadow { get => _shadow; set => _shadow = value; }
 
     #endregion
 }
