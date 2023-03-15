@@ -47,7 +47,10 @@ public class PatrolEnemy : MonoBehaviour
         {
             Vector3 _playerPosition = _playerTransform.position;
             _agent.SetDestination(_playerPosition);
-            Debug.Log("JE ME DIRIGE VERS PLAYER");
+            if (Vector3.Distance(transform.position, _playerPosition) <= 1f)
+            {
+                _agent.ResetPath();
+            }
         }
         else
         {
