@@ -7,6 +7,7 @@ public class PatrolEnemy : MonoBehaviour
 
     [SerializeField] Transform[] _waypoints;
     [SerializeField] bool _backAndForth;
+    [SerializeField] LayerMask _groundMask;
 
     #endregion
 
@@ -38,7 +39,12 @@ public class PatrolEnemy : MonoBehaviour
     {
         if (_playerDetected.IsPlayerVisible)
         {
-            PlayerGetsDetected();
+            DetectionOfPlayer();
+            if (_playerDetected.Shadow != null)
+            {
+                _shadowPosition = _playerDetected.Shadow.transform.position;
+                gameObject.transform.LookAt(_shadowPosition);
+            }
         }
         if (_isMovingToShadow)
         {
@@ -72,11 +78,26 @@ public class PatrolEnemy : MonoBehaviour
         }
     }
 
-    private void PlayerGetsDetected()
+    private void DetectionOfPlayer()
     {
+        Vector3 startingpoint = new Vector3(transform.position.x, transform.position.y, transform.position.z + 0.5f);
+        Vector3 localDirection = transform.InverseTransformDirection(startingpoint);
         Vector3 _playerPosition = _playerTransform.position;
-        _agent.SetDestination(_playerPosition);
-        _isMovingToShadow = true;
+        if (Physics.Raycast(localDirection, Vector3.forward, out RaycastHit hit, 500 , _groundMask))
+        {
+            if (Vector3.Distance(transform.position, _playerPosition) < Vector3.Distance(transform.position, hit.point))
+            {
+                _agent.SetDestination(_playerPosition);
+                _isMovingToShadow = true;
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Vector3 zInfinity = new Vector3(transform.position.x, transform.position.y, transform.position.z + 500);
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, zInfinity);
     }
 
     private void GoToNextPoint()
@@ -133,6 +154,7 @@ public class PatrolEnemy : MonoBehaviour
     PlayerDetected _playerDetected;
     Transform _playerTransform;
     GameObject _player;
+    Vector3 _shadowPosition;
 
     #endregion
 }

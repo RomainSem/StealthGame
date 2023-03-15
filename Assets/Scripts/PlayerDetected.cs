@@ -7,6 +7,7 @@ public class PlayerDetected : MonoBehaviour
     #region Exposed
 
     [SerializeField] GameObject _playerShadow;
+    [SerializeField] Light _cameraLight;
 
     #endregion
 
@@ -40,6 +41,14 @@ public class PlayerDetected : MonoBehaviour
     {
         if (other.gameObject.tag == "CameraCone")
         {
+            if (!IsPlayerVisible)
+            {
+                IsPlayerVisible = true;
+            }
+            _cameraLight.color = Color.red;
+        }
+        if (other.gameObject.tag == "EnemyCone")
+        {
             IsPlayerVisible = true;
         }
     }
@@ -54,6 +63,16 @@ public class PlayerDetected : MonoBehaviour
             }
             Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
             // _patrolEnemy.SetInterest(Shadow);
+            _cameraLight.color = Color.white;
+            IsPlayerVisible = false;
+        }
+        if (other.gameObject.tag == "EnemyCone")
+        {
+            if (Shadow != null)
+            {
+                Destroy(Shadow);
+            }
+            Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
             IsPlayerVisible = false;
         }
     }

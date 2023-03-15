@@ -155,8 +155,8 @@ public class PlayerMovements : MonoBehaviour
         Vector3 averagePosition = _floorDetector.AverageHeight();
         Vector3 newPosition = new Vector3(_rgdbody.position.x, averagePosition.y + _floorYOffeset, _rgdbody.position.z);
 
-        _rgdbody.MovePosition(newPosition);
-        //transform.position = newPosition;
+        //_rgdbody.MovePosition(newPosition);
+        transform.position = newPosition;
         _direction.y = 0;
         //_rgdbody.position = new Vector3(_rgdbody.position.x, 0, _rgdbody.position.z) ;
     }

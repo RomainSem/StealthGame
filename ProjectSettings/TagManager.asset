@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - CameraCone
+  - EnemyCone
   layers:
   - Default
   - TransparentFX
