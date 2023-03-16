@@ -7,6 +7,11 @@ public class PatrolEnemy : MonoBehaviour
 
     [SerializeField] Transform[] _waypoints;
     [SerializeField] bool _backAndForth;
+    [Header("Player")]
+    [SerializeField] GameObject _player;
+    [SerializeField] Transform _playerTransform;
+    [SerializeField] PlayerDetected _playerDetected;
+    [Header("Raycast")]
     [SerializeField] LayerMask _groundMask;
 
     #endregion
@@ -15,9 +20,6 @@ public class PatrolEnemy : MonoBehaviour
 
     private void Awake()
     {
-        _player = GameObject.FindGameObjectWithTag("Player");
-        _playerDetected = _player.GetComponent<PlayerDetected>();
-        _playerTransform = _player.GetComponent<Transform>();
         _agent = GetComponent<NavMeshAgent>();
     }
 
@@ -80,14 +82,15 @@ public class PatrolEnemy : MonoBehaviour
 
     private void DetectionOfPlayer()
     {
-        Vector3 startingpoint = new Vector3(transform.position.x, transform.position.y, transform.position.z + 0.5f);
-        Vector3 localDirection = transform.InverseTransformDirection(startingpoint);
-        Vector3 _playerPosition = _playerTransform.position;
-        if (Physics.Raycast(localDirection, Vector3.forward, out RaycastHit hit, 500 , _groundMask))
+        Vector3 startingpoint = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+        //Vector3 localDirection = transform.InverseTransformDirection(startingpoint);
+        Vector3 directionToPlayer = _playerTransform.position - transform.position;
+        if (Physics.Raycast(startingpoint, directionToPlayer, out RaycastHit hit, 500 , _groundMask))
         {
-            if (Vector3.Distance(transform.position, _playerPosition) < Vector3.Distance(transform.position, hit.point))
+            Debug.Log(hit.collider.name);
+            if (Vector3.Distance(transform.position, _playerTransform.position) < Vector3.Distance(transform.position, hit.point))
             {
-                _agent.SetDestination(_playerPosition);
+                _agent.SetDestination(_playerTransform.position);
                 _isMovingToShadow = true;
             }
         }
@@ -95,10 +98,14 @@ public class PatrolEnemy : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Vector3 zInfinity = new Vector3(transform.position.x, transform.position.y, transform.position.z + 500);
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, zInfinity);
+        if (_playerTransform != null)
+        {
+            Gizmos.color = Color.red;
+            Vector3 directionToPlayer = _playerTransform.position - transform.position;
+            Gizmos.DrawLine(transform.position, transform.position + directionToPlayer);
+        }
     }
+
 
     private void GoToNextPoint()
     {
@@ -151,10 +158,8 @@ public class PatrolEnemy : MonoBehaviour
     int _currentPoint = 0;
     bool _isGoing;
     bool _isMovingToShadow = false;
-    PlayerDetected _playerDetected;
-    Transform _playerTransform;
-    GameObject _player;
     Vector3 _shadowPosition;
+
 
     #endregion
 }
