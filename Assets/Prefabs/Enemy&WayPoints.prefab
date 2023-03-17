@@ -88,9 +88,12 @@ MonoBehaviour:
   - {fileID: 7524418650028628743}
   - {fileID: 7524418648756109409}
   _backAndForth: 0
+  _player: {fileID: 0}
+  _playerTransform: {fileID: 0}
+  _playerDetected: {fileID: 0}
   _groundMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 72
 --- !u!1 &4213338652065426134
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,8 +543,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8440951796076581281}
   m_LocalRotation: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: 1.2200003, y: 1.513, z: 19.83}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 7.1625, y: 1.513, z: 19.83}
+  m_LocalScale: {x: 1, y: 1, z: 5.8516936}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6617684168536834694}
@@ -897,7 +900,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 10081
+  m_VersionIndex: 10090
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
