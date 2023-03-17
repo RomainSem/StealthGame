@@ -13,26 +13,6 @@ public class PlayerDetected : MonoBehaviour
 
     #region Unity Lifecycle
 
-    private void Awake()
-    {
-
-    }
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
-    private void FixedUpdate()
-    {
-
-    }
-
     #endregion
 
     #region Methods
@@ -43,6 +23,7 @@ public class PlayerDetected : MonoBehaviour
         {
             if (!IsPlayerVisible)
             {
+                IsDetectedByCamera = true;
                 IsPlayerVisible = true;
             }
             _cameraLight.color = Color.red;
@@ -64,17 +45,16 @@ public class PlayerDetected : MonoBehaviour
             Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
             // _patrolEnemy.SetInterest(Shadow);
             _cameraLight.color = Color.white;
-            IsPlayerVisible = false;
         }
-        if (other.gameObject.tag == "EnemyCone")
-        {
-            if (Shadow != null)
-            {
-                Destroy(Shadow);
-            }
-            Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
-            IsPlayerVisible = false;
-        }
+        //if (other.gameObject.tag == "EnemyCone")
+        //{
+        //    if (Shadow != null)
+        //    {
+        //        Destroy(Shadow);
+        //    }
+        //    Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
+        //    IsPlayerVisible = false;
+        //}
     }
 
 
@@ -83,9 +63,11 @@ public class PlayerDetected : MonoBehaviour
     #region Private & Protected
 
     bool _isPlayerVisible;
+    bool _isDetectedByCamera;
     GameObject _shadow;
 
     public bool IsPlayerVisible { get => _isPlayerVisible; set => _isPlayerVisible = value; }
+    public bool IsDetectedByCamera { get => _isDetectedByCamera; set => _isDetectedByCamera = value; }
     public GameObject Shadow { get => _shadow; private set => _shadow = value; }
 
     #endregion

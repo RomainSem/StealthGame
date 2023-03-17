@@ -6,7 +6,6 @@ using UnityEngine.AI;
 
 public class Hesitating : StateMachineBehaviour
 {
-
     private void Awake()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
@@ -17,23 +16,29 @@ public class Hesitating : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _enemy = animator.gameObject;
-        _agent = _enemy.GetComponent<NavMeshAgent>();
-        _patrolEnemyScript = _enemy.GetComponent<PatrolEnemy>();
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (_playerDetectedScript.IsDetectedByCamera)
+        {
+            _enemy.transform.LookAt(_player.transform.position);
+            _playerDetectedScript.IsPlayerVisible = true;
+            timer = 10f;
+        }
 
         RaycastHit hit;
         if (Physics.Raycast(_enemy.transform.position, _player.transform.position - _enemy.transform.position, out hit))
         {
+
             if (hit.collider.gameObject.tag == "Player")
             {
                 timer += Time.deltaTime;
                 if (timer >= 1.5f)
                 {
                     _enemy.transform.LookAt(_player.transform.position);
+                    _playerDetectedScript.IsPlayerVisible = true;
                 }
             }
             else if (hit.collider.gameObject.tag == "Ground")
@@ -42,42 +47,14 @@ public class Hesitating : StateMachineBehaviour
                 _playerDetectedScript.IsPlayerVisible = false;
                 animator.SetBool("IsPlayerVisible", _playerDetectedScript.IsPlayerVisible);
             }
+
             animator.SetFloat("TimerToStartPursuit", timer);
         }
     }
 
 
-    //private void Destination()
-    //{
-    //    if (_playerDetectedScript.IsPlayerVisible)
-    //    {
-    //        DetectionOfPlayer();
-    //        if (_playerDetectedScript.Shadow != null)
-    //        {
-    //            _shadowPosition = _playerDetectedScript.Shadow.transform.position;
-    //            _enemy.transform.LookAt(_shadowPosition);
-    //        }
-    //    }
-    //    if (_isMovingToShadow)
-    //    {
-    //        if (_playerDetectedScript.Shadow != null)
-    //        {
-    //            if (Vector3.Distance(_enemy.transform.position, _playerDetectedScript.Shadow.transform.position) <= 2f)
-    //            {
-    //                Destroy(_playerDetectedScript.Shadow);
-    //                _agent.ResetPath();
-    //                _isMovingToShadow = false;
-    //            }
-    //        }
-    //    }
-    //}
-
-
-    PatrolEnemy _patrolEnemyScript;
     PlayerDetected _playerDetectedScript;
     GameObject _enemy;
-    NavMeshAgent _agent;
     GameObject _player;
     float timer = 0f;
-    Vector3 _shadowPosition;
 }

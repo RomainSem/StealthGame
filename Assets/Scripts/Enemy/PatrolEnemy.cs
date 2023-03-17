@@ -20,12 +20,12 @@ public class PatrolEnemy : MonoBehaviour
 
     private void Awake()
     {
-        _agent = GetComponent<NavMeshAgent>();
+        //_agent = GetComponent<NavMeshAgent>();
     }
 
     void Start()
     {
-        _agent.SetDestination(_waypoints[_currentPoint].position);
+        //_agent.SetDestination(_waypoints[_currentPoint].position);
     }
 
     void Update()
@@ -61,22 +61,22 @@ public class PatrolEnemy : MonoBehaviour
     //        }
     //    }
 
-    private void DetectionOfPlayer()
-    {
-        Vector3 startingpoint = transform.position;
-        //Vector3 localDirection = transform.InverseTransformDirection(startingpoint);
-        Vector3 directionToPlayer = _playerTransform.position - startingpoint;
-        if (Physics.Raycast(startingpoint, directionToPlayer, out RaycastHit hit, 500 , _groundMask))
-        {
-            Debug.Log(hit.collider.name);
-            if (Vector3.Distance(startingpoint, _playerTransform.position) < Vector3.Distance(startingpoint, hit.point))
-            {
+    //private void DetectionOfPlayer()
+    //{
+    //    Vector3 startingpoint = transform.position;
+    //    //Vector3 localDirection = transform.InverseTransformDirection(startingpoint);
+    //    Vector3 directionToPlayer = _playerTransform.position - startingpoint;
+    //    if (Physics.Raycast(startingpoint, directionToPlayer, out RaycastHit hit, 500 , _groundMask))
+    //    {
+    //        Debug.Log(hit.collider.name);
+    //        if (Vector3.Distance(startingpoint, _playerTransform.position) < Vector3.Distance(startingpoint, hit.point))
+    //        {
 
-                //_agent.SetDestination(_playerTransform.position);
-                //_isMovingToShadow = true;
-            }
-        }
-    }
+    //            //_agent.SetDestination(_playerTransform.position);
+    //            //_isMovingToShadow = true;
+    //        }
+    //    }
+    //}
 
     private void OnDrawGizmos()
     {
@@ -92,15 +92,15 @@ public class PatrolEnemy : MonoBehaviour
 
     #region Private & Protected
 
-    NavMeshAgent _agent;
-    int _currentPoint = 0;
+    //NavMeshAgent _agent;
+    //int _currentPoint = 0;
     //bool _isGoing;
     //bool _isMovingToShadow = false;
-    Vector3 _shadowPosition;
+    //Vector3 _shadowPosition;
 
     public Transform[] Waypoints { get => _waypoints; private set => _waypoints = value; }
     public bool BackAndForth { get => _backAndForth; private set => _backAndForth = value; }
-    public LayerMask GroundMask { get => _groundMask; set => _groundMask = value; }
+    //public LayerMask GroundMask { get => _groundMask; set => _groundMask = value; }
 
 
     #endregion

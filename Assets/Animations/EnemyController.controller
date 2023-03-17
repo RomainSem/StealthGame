@@ -156,6 +156,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd2412678d20154f90a83c1d2074513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2741371012501014247
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d458f22376677d747947aced92f5ddef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerShadow: {fileID: 5043168914015455621, guid: 14b4a270ec911ba41a392495831fb2c0, type: 3}
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -170,25 +183,25 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: TimerToStartPursuit
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: IsPlayerCollided
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: IsShadowPlayerCollided
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -315,7 +328,8 @@ AnimatorState:
   m_Transitions:
   - {fileID: 5951460748096296278}
   - {fileID: -5142852454523825502}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -2741371012501014247}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
