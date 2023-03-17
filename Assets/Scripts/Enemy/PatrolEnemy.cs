@@ -60,25 +60,6 @@ public class PatrolEnemy : MonoBehaviour
     //            }
     //        }
     //    }
-    //else
-    //{
-    //    if (_backAndForth)
-    //    {
-    //        if (_isGoing)
-    //        {
-    //            GoToNextPoint();
-    //        }
-    //        else
-    //        {
-    //            GoToPreviousPoint();
-    //        }
-    //    }
-    //    else
-    //    {
-    //        GoToNextPoint();
-    //    }
-    //}
-    //}
 
     private void DetectionOfPlayer()
     {
@@ -107,50 +88,6 @@ public class PatrolEnemy : MonoBehaviour
         }
     }
 
-
-    //private void GoToNextPoint()
-    //{
-    //    if (_agent.remainingDistance <= 1)
-    //    {
-    //        _currentPoint++;
-    //        if (_currentPoint >= _waypoints.Length)
-    //        {
-    //            if (_backAndForth)
-    //            {
-    //                _isGoing = false;
-    //                _currentPoint = _waypoints.Length - 1;
-    //            }
-    //            else
-    //            {
-    //                _currentPoint = 0;
-    //            }
-    //        }
-    //        _agent.SetDestination(_waypoints[_currentPoint].position);
-    //    }
-    //}
-
-    //private void GoToPreviousPoint()
-    //{
-    //    if (_agent.remainingDistance <= 1)
-    //    {
-    //        _currentPoint--;
-
-    //        if (_currentPoint < 0)
-    //        {
-    //            if (_backAndForth)
-    //            {
-    //                _isGoing = true;
-    //                _currentPoint = 0;
-    //            }
-    //            else
-    //            {
-    //                _currentPoint = _waypoints.Length - 1;
-    //            }
-    //        }
-    //        _agent.SetDestination(_waypoints[_currentPoint].position);
-    //    }
-    //}
-
     #endregion
 
     #region Private & Protected
@@ -158,7 +95,7 @@ public class PatrolEnemy : MonoBehaviour
     NavMeshAgent _agent;
     int _currentPoint = 0;
     //bool _isGoing;
-    bool _isMovingToShadow = false;
+    //bool _isMovingToShadow = false;
     Vector3 _shadowPosition;
 
     public Transform[] Waypoints { get => _waypoints; private set => _waypoints = value; }
