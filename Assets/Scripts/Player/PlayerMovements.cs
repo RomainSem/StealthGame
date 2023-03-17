@@ -208,10 +208,10 @@ public class PlayerMovements : MonoBehaviour
     private bool isGrounded;
     private RaycastHit _slopeHit;
 
-    public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
-    public Vector3 Direction { get => _direction; set => _direction = value; }
-    public bool IsJumping { get => _isJumping; set => _isJumping = value; }
-    public bool IsSneaking { get => _isSneaking; set => _isSneaking = value; }
+    public bool IsGrounded { get => isGrounded; private set => isGrounded = value; }
+    public Vector3 Direction { get => _direction; private set => _direction = value; }
+    public bool IsJumping { get => _isJumping; private set => _isJumping = value; }
+    public bool IsSneaking { get => _isSneaking; private set => _isSneaking = value; }
     public bool IsRunning { get => _isRunning; set => _isRunning = value; }
 
     #endregion

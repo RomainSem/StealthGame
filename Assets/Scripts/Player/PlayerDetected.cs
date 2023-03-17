@@ -86,7 +86,7 @@ public class PlayerDetected : MonoBehaviour
     GameObject _shadow;
 
     public bool IsPlayerVisible { get => _isPlayerVisible; set => _isPlayerVisible = value; }
-    public GameObject Shadow { get => _shadow; set => _shadow = value; }
+    public GameObject Shadow { get => _shadow; private set => _shadow = value; }
 
     #endregion
 }

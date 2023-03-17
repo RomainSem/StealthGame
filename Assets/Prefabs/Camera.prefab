@@ -1127,7 +1127,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2654961727544530558}
   - component: {fileID: 8789449567319405361}
-  - component: {fileID: 1515514838}
   - component: {fileID: 2090959394}
   m_Layer: 0
   m_Name: Head
@@ -1169,18 +1168,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.48757982, y: 0.35208607, z: 0.8732986}
   m_Center: {x: 0.012770891, y: 0.031043053, z: 0.19779405}
---- !u!114 &1515514838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8608334496149345299}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4349e02a292d7444b3a93144ca3b57e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2090959394
 MonoBehaviour:
   m_ObjectHideFlags: 0

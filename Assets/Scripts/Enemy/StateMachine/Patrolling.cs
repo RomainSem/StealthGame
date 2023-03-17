@@ -5,13 +5,13 @@ using UnityEngine.AI;
 
 public class Patrolling : StateMachineBehaviour
 {
-
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _patrolEnemy = animator.gameObject;
-        _patrolEnemyScript = _patrolEnemy.GetComponent<PatrolEnemy>();
-        _agent = _patrolEnemy.GetComponent<NavMeshAgent>();
+        _enemy = animator.gameObject;
+        _patrolEnemyScript = _enemy.GetComponent<PatrolEnemy>();
+        _playerDetectedScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDetected>();
+        _agent = _enemy.GetComponent<NavMeshAgent>();
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -31,6 +31,10 @@ public class Patrolling : StateMachineBehaviour
         else
         {
             GoToNextPoint();
+        }
+        if (_playerDetectedScript != null)
+        {
+            animator.SetBool("IsPlayerVisible", _playerDetectedScript.IsPlayerVisible);
         }
     }
 
@@ -81,5 +85,6 @@ public class Patrolling : StateMachineBehaviour
     int _currentPoint = 0;
     bool _isGoing;
     PatrolEnemy _patrolEnemyScript;
-    GameObject _patrolEnemy;
+    PlayerDetected _playerDetectedScript;
+    GameObject _enemy;
 }
