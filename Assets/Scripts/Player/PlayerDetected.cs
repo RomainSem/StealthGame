@@ -13,6 +13,11 @@ public class PlayerDetected : MonoBehaviour
 
     #region Unity Lifecycle
 
+    private void Awake()
+    {
+
+    }
+
     #endregion
 
     #region Methods
@@ -43,18 +48,10 @@ public class PlayerDetected : MonoBehaviour
                 Destroy(Shadow);
             }
             Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
+            IsPlayerVisible = true;
             // _patrolEnemy.SetInterest(Shadow);
             _cameraLight.color = Color.white;
         }
-        //if (other.gameObject.tag == "EnemyCone")
-        //{
-        //    if (Shadow != null)
-        //    {
-        //        Destroy(Shadow);
-        //    }
-        //    Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
-        //    IsPlayerVisible = false;
-        //}
     }
 
 

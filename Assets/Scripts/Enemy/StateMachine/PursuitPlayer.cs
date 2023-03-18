@@ -38,7 +38,8 @@ public class PursuitPlayer : StateMachineBehaviour
             }
             else if (_playerDetectedScript.Shadow != null)
             {
-                _agent.SetDestination(_playerDetectedScript.Shadow.transform.position);
+                _shadowPosition = _playerDetectedScript.Shadow.transform.position;
+                _agent.SetDestination(_shadowPosition);
                 _enemy.transform.LookAt(_player.transform.position);
             }
             else
@@ -57,40 +58,42 @@ public class PursuitPlayer : StateMachineBehaviour
                 _agent.SetDestination(_player.transform.position);
                 if (Vector3.Distance(_enemy.transform.position, _player.transform.position) <= 1f)
                 {
-                    _playerDetectedScript.IsPlayerVisible = true;
+                    //_playerDetectedScript.IsPlayerVisible = true;
                     _isPlayerCollided = true;
                     animator.SetBool("IsPlayerCollided", _isPlayerCollided);
                 }
             }
             else if (hit.collider.gameObject.tag == "Ground")
             {
-                _playerDetectedScript.IsPlayerVisible = false;
-                Vector3 playerPosLastSeen = _player.transform.position;
-                if (_shadow != null)
+                //_playerDetectedScript.IsPlayerVisible = false;
+                if (_shadow == null && _playerDetectedScript.Shadow == null && _isShadowInstantiated == false)
+                {
+                    CreateShadow(_playerPosLastSeen);
+                }
+                else
                 {
                     Destroy(_shadow);
-                    _shadow = Instantiate(_playerShadow, playerPosLastSeen, Quaternion.identity);
-                    _enemy.transform.LookAt(playerPosLastSeen);
-                    _agent.SetDestination(playerPosLastSeen);
-                    if (Vector3.Distance(_enemy.transform.position, playerPosLastSeen) <= 1f)
-                    {
-                        _isShadowPlayerCollided = true;
-                        animator.SetBool("IsShadowPlayerCollided", _isShadowPlayerCollided);
-                    }
                 }
-                else if (_playerDetectedScript.Shadow != null)
+                _enemy.transform.LookAt(_playerPosLastSeen);
+                _agent.SetDestination(_playerPosLastSeen);
+                if (Vector3.Distance(_enemy.transform.position, _playerPosLastSeen) <= 1f)
                 {
-                    Destroy(_playerDetectedScript.Shadow);
-                    _shadow = Instantiate(_playerShadow, playerPosLastSeen, Quaternion.identity);
-                    _enemy.transform.LookAt(playerPosLastSeen);
-                    _agent.SetDestination(playerPosLastSeen);
-                    if (Vector3.Distance(_enemy.transform.position, playerPosLastSeen) <= 1f)
-                    {
-                        _isShadowPlayerCollided = true;
-                        animator.SetBool("IsShadowPlayerCollided", _isShadowPlayerCollided);
-                    }
+                    _isShadowPlayerCollided = true;
+                    animator.SetBool("IsShadowPlayerCollided", _isShadowPlayerCollided);
                 }
             }
+        }
+    }
+
+    private void CreateShadow(Vector3 position)
+    {
+        if (!_isShadowInstantiated)
+        {
+            _playerPosLastSeen = _player.transform.position;
+            _shadow = Instantiate(_playerShadow, position, Quaternion.identity);
+            Debug.Log("VARIABLE : " + position);
+            Debug.Log("PLAYER : " + _player.transform.position);
+            _isShadowInstantiated = true;
         }
     }
 
@@ -101,8 +104,10 @@ public class PursuitPlayer : StateMachineBehaviour
     GameObject _player;
     GameObject _shadow;
     Vector3 _shadowPosition;
+    Vector3 _playerPosLastSeen;
     bool _isPlayerCollided;
     bool _isShadowPlayerCollided;
+    bool _isShadowInstantiated;
 }
 
 
