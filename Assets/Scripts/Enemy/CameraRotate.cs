@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class CameraRotate : MonoBehaviour
 {
     #region Exposed
 
+    [SerializeField] GameObject _player;
     [SerializeField] float _rotationSpeed = 0.5f;
     [SerializeField] Transform _leftPos;
     [SerializeField] Transform _rightPos;
+    [SerializeField] Light _cameraLight;
 
 
     #endregion
@@ -17,6 +20,7 @@ public class CameraRotate : MonoBehaviour
 
     private void Awake()
     {
+        _playerDetectedScript = _player.GetComponent<PlayerDetected>();
     }
 
     void Start()
@@ -27,11 +31,12 @@ public class CameraRotate : MonoBehaviour
     void Update()
     {
         CameraRotation();
+        CameraRaycast();
     }
 
     private void FixedUpdate()
     {
-        
+
     }
 
     #endregion
@@ -51,11 +56,37 @@ public class CameraRotate : MonoBehaviour
         }
     }
 
+    private void CameraRaycast()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, _player.transform.position - transform.position, out hit))
+        {
+            if (hit.collider.gameObject.tag == "Player" && _playerDetectedScript.IsDetectedByCamera)
+            {
+                _playerDetectedScript.IsPlayerVisible = true;
+            }
+            else if (hit.collider.gameObject.tag == "Ground")
+            {
+                _cameraLight.color = Color.white;
+                _playerDetectedScript.IsPlayerVisible = false;
+            }
+        }
+
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Vector3 directionToPlayer = _player.transform.position - transform.position;
+        Gizmos.DrawLine(transform.position, transform.position + directionToPlayer);
+    }
+
     #endregion
 
     #region Private & Protected
 
     Transform _rotateTarget;
+    PlayerDetected _playerDetectedScript;
     bool _goLeft;
 
     #endregion

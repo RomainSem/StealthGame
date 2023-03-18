@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PursuitPlayer : StateMachineBehaviour
@@ -65,14 +66,20 @@ public class PursuitPlayer : StateMachineBehaviour
             }
             else if (hit.collider.gameObject.tag == "Ground")
             {
+                Vector3 _playerPosLastSeen = _player.transform.position;
+
                 //_playerDetectedScript.IsPlayerVisible = false;
                 if (_shadow == null && _playerDetectedScript.Shadow == null && _isShadowInstantiated == false)
                 {
-                    CreateShadow(_playerPosLastSeen);
+                    //CreateShadow(_playerPosLastSeen);
+                    _playerPosLastSeen = _player.transform.position;
+                    _shadow = Instantiate(_playerShadow, _playerPosLastSeen, Quaternion.identity);
+                    _isShadowInstantiated = true;
                 }
                 else
                 {
                     Destroy(_shadow);
+                    Destroy(_playerDetectedScript.Shadow);
                 }
                 _enemy.transform.LookAt(_playerPosLastSeen);
                 _agent.SetDestination(_playerPosLastSeen);
@@ -85,17 +92,14 @@ public class PursuitPlayer : StateMachineBehaviour
         }
     }
 
-    private void CreateShadow(Vector3 position)
-    {
-        if (!_isShadowInstantiated)
-        {
-            _playerPosLastSeen = _player.transform.position;
-            _shadow = Instantiate(_playerShadow, position, Quaternion.identity);
-            Debug.Log("VARIABLE : " + position);
-            Debug.Log("PLAYER : " + _player.transform.position);
-            _isShadowInstantiated = true;
-        }
-    }
+    //private void CreateShadow(Vector3 position)
+    //{
+    //    _playerPosLastSeen = _player.transform.position;
+    //    _shadow = Instantiate(_playerShadow, position, Quaternion.identity);
+    //    Debug.Log("VARIABLE : " + position);
+    //    Debug.Log("PLAYER : " + _player.transform.position);
+    //    _isShadowInstantiated = true;
+    //}
 
 
     PlayerDetected _playerDetectedScript;
@@ -104,7 +108,7 @@ public class PursuitPlayer : StateMachineBehaviour
     GameObject _player;
     GameObject _shadow;
     Vector3 _shadowPosition;
-    Vector3 _playerPosLastSeen;
+    //Vector3 _playerPosLastSeen;
     bool _isPlayerCollided;
     bool _isShadowPlayerCollided;
     bool _isShadowInstantiated;

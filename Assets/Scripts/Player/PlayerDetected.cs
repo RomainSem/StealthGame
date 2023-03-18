@@ -29,9 +29,11 @@ public class PlayerDetected : MonoBehaviour
             if (!IsPlayerVisible)
             {
                 IsDetectedByCamera = true;
-                IsPlayerVisible = true;
             }
-            _cameraLight.color = Color.red;
+            else
+            {
+                _cameraLight.color = Color.red;
+            }
         }
         if (other.gameObject.tag == "EnemyCone")
         {
@@ -47,9 +49,10 @@ public class PlayerDetected : MonoBehaviour
             {
                 Destroy(Shadow);
             }
-            Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
-            IsPlayerVisible = true;
-            // _patrolEnemy.SetInterest(Shadow);
+            if (IsPlayerVisible)
+            {
+                Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
+            }
             _cameraLight.color = Color.white;
         }
     }
