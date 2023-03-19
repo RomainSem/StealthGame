@@ -53,13 +53,13 @@ public class PursuitPlayer : StateMachineBehaviour
         RaycastHit hit;
         if (Physics.Raycast(_enemy.transform.position, _player.transform.position - _enemy.transform.position, out hit))
         {
-            if (hit.collider.gameObject.tag == "Player")
+            if (hit.collider.gameObject.tag == "Player" && _playerDetectedScript.IsDetected)
             {
+                _playerDetectedScript.IsEnemyRayHittingPlayer = true;
                 _enemy.transform.LookAt(_player.transform.position);
                 _agent.SetDestination(_player.transform.position);
                 if (Vector3.Distance(_enemy.transform.position, _player.transform.position) <= 1f)
                 {
-                    //_playerDetectedScript.IsPlayerVisible = true;
                     _isPlayerCollided = true;
                     animator.SetBool("IsPlayerCollided", _isPlayerCollided);
                 }
@@ -68,7 +68,7 @@ public class PursuitPlayer : StateMachineBehaviour
             {
                 Vector3 _playerPosLastSeen = _player.transform.position;
 
-                //_playerDetectedScript.IsPlayerVisible = false;
+                _playerDetectedScript.IsEnemyRayHittingPlayer = false;
                 if (_shadow == null && _playerDetectedScript.Shadow == null && _isShadowInstantiated == false)
                 {
                     //CreateShadow(_playerPosLastSeen);

@@ -63,7 +63,7 @@ public class CameraBehaviour : MonoBehaviour
         {
             if (hit.collider.gameObject.tag == "Player"/* && _playerDetectedScript.IsDetected*/)
             {
-                _playerDetectedScript.IsRaycastHittingPlayer = true;
+                _playerDetectedScript.IsCamRayHittingPlayer = true;
                 if (_playerDetectedScript.IsDetected)
                 {
                     _playerDetectedScript.CameraLight.color = Color.red;
@@ -72,7 +72,7 @@ public class CameraBehaviour : MonoBehaviour
             else if (hit.collider.gameObject.tag == "Ground")
             {
                 _playerDetectedScript.CameraLight.color = Color.white;
-                _playerDetectedScript.IsRaycastHittingPlayer = false;
+                _playerDetectedScript.IsCamRayHittingPlayer = false;
                 if (!_playerDetectedScript.IsDetected)
                 {
                     _playerDetectedScript.CameraLight.color = Color.white;

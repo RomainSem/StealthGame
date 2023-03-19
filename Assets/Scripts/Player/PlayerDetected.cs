@@ -24,18 +24,21 @@ public class PlayerDetected : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "CameraCone")
+        if (other.gameObject.tag == "CameraCone" && IsCamRayHittingPlayer)
         {
-            if (IsRaycastHittingPlayer)
-            {
-                IsDetected = true;
-            }
-            //_cameraLight.color = Color.red;
+            IsDetected = true;
         }
         if (other.gameObject.tag == "EnemyCone")
         {
-            IsDetected = true;
-            //IsPlayerVisible = true;
+            if (IsEnemyRayHittingPlayer)
+            {
+                IsDetected = true;
+            }
+            else if (IsDetected && !IsEnemyRayHittingPlayer)
+            {
+                Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
+                IsDetected = false;
+            }
         }
     }
 
@@ -43,16 +46,20 @@ public class PlayerDetected : MonoBehaviour
     {
         if (other.gameObject.tag == "CameraCone")
         {
-            if (Shadow != null)
+            if (IsCamRayHittingPlayer)
             {
-                Destroy(Shadow);
-            }
-            if (IsRaycastHittingPlayer)
-            {
+                if (Shadow != null)
+                {
+                    Destroy(Shadow);
+                }
                 Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
             }
-            IsDetected = false;
+            //IsDetected = false;
             _cameraLight.color = Color.white;
+        }
+        if (other.gameObject.tag == "Enemy")
+        {
+            IsDetected = false;
         }
     }
 
@@ -61,11 +68,13 @@ public class PlayerDetected : MonoBehaviour
 
     #region Private & Protected
 
-    bool _isRaycastHittingPlayer;
+    bool _isCamRayHittingPlayer;
+    bool _isEnemyRayHittingPlayer;
     bool _isDetected;
     GameObject _shadow;
 
-    public bool IsRaycastHittingPlayer { get => _isRaycastHittingPlayer; set => _isRaycastHittingPlayer = value; }
+    public bool IsCamRayHittingPlayer { get => _isCamRayHittingPlayer; set => _isCamRayHittingPlayer = value; }
+    public bool IsEnemyRayHittingPlayer { get => _isEnemyRayHittingPlayer; set => _isEnemyRayHittingPlayer = value; }
     public bool IsDetected { get => _isDetected; set => _isDetected = value; }
     public GameObject Shadow { get => _shadow; private set => _shadow = value; }
     public Light CameraLight { get => _cameraLight; set => _cameraLight = value; }

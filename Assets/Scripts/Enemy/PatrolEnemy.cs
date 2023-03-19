@@ -100,7 +100,6 @@ public class PatrolEnemy : MonoBehaviour
 
     public Transform[] Waypoints { get => _waypoints; private set => _waypoints = value; }
     public bool BackAndForth { get => _backAndForth; private set => _backAndForth = value; }
-    //public LayerMask GroundMask { get => _groundMask; set => _groundMask = value; }
 
 
     #endregion

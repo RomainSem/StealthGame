@@ -21,12 +21,12 @@ public class Hesitating : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (_playerDetectedScript.IsDetected)
-        {
-            _enemy.transform.LookAt(_player.transform.position);
-            _playerDetectedScript.IsRaycastHittingPlayer = true;
-            timer = 10f;
-        }
+        //if (_playerDetectedScript.IsDetected)
+        //{
+        //    _playerDetectedScript.IsRaycastHittingPlayer = true;
+        //    _enemy.transform.LookAt(_player.transform.position);
+        //    timer = 10f;
+        //}
 
         RaycastHit hit;
         if (Physics.Raycast(_enemy.transform.position, _player.transform.position - _enemy.transform.position, out hit))
@@ -34,20 +34,21 @@ public class Hesitating : StateMachineBehaviour
 
             if (hit.collider.gameObject.tag == "Player")
             {
+                _playerDetectedScript.IsEnemyRayHittingPlayer = true;
                 timer += Time.deltaTime;
-                if (timer >= 1.5f)
-                {
-                    _enemy.transform.LookAt(_player.transform.position);
-                    _playerDetectedScript.IsRaycastHittingPlayer = true;
-                }
+                //if (timer >= 1.5f)
+                //{
+                //    _enemy.transform.LookAt(_player.transform.position);
+                //    _playerDetectedScript.IsRaycastHittingPlayer = true;
+                //}
             }
             else if (hit.collider.gameObject.tag == "Ground")
             {
+                _playerDetectedScript.IsEnemyRayHittingPlayer = false;
                 timer = 0f;
-                _playerDetectedScript.IsRaycastHittingPlayer = false;
-                animator.SetBool("IsPlayerVisible", _playerDetectedScript.IsRaycastHittingPlayer);
             }
 
+            animator.SetBool("IsPlayerVisible", _playerDetectedScript.IsDetected);
             animator.SetFloat("TimerToStartPursuit", timer);
         }
     }
