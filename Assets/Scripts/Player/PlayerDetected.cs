@@ -28,16 +28,14 @@ public class PlayerDetected : MonoBehaviour
         {
             if (!IsPlayerVisible)
             {
-                IsDetectedByCamera = true;
+                IsDetected = true;
             }
-            else
-            {
-                _cameraLight.color = Color.red;
-            }
+            //_cameraLight.color = Color.red;
         }
         if (other.gameObject.tag == "EnemyCone")
         {
-            IsPlayerVisible = true;
+            IsDetected = true;
+            //IsPlayerVisible = true;
         }
     }
 
@@ -63,12 +61,13 @@ public class PlayerDetected : MonoBehaviour
     #region Private & Protected
 
     bool _isPlayerVisible;
-    bool _isDetectedByCamera;
+    bool _isDetected;
     GameObject _shadow;
 
     public bool IsPlayerVisible { get => _isPlayerVisible; set => _isPlayerVisible = value; }
-    public bool IsDetectedByCamera { get => _isDetectedByCamera; set => _isDetectedByCamera = value; }
+    public bool IsDetected { get => _isDetected; set => _isDetected = value; }
     public GameObject Shadow { get => _shadow; private set => _shadow = value; }
+    public Light CameraLight { get => _cameraLight; set => _cameraLight = value; }
 
     #endregion
 }

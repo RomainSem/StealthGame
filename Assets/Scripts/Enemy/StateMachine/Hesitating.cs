@@ -21,7 +21,7 @@ public class Hesitating : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (_playerDetectedScript.IsDetectedByCamera)
+        if (_playerDetectedScript.IsDetected)
         {
             _enemy.transform.LookAt(_player.transform.position);
             _playerDetectedScript.IsPlayerVisible = true;

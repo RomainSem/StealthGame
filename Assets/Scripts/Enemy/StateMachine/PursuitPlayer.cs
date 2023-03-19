@@ -29,7 +29,7 @@ public class PursuitPlayer : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
-        if (_playerDetectedScript.IsDetectedByCamera)
+        if (_playerDetectedScript.IsDetected)
         {
             if (_shadow != null)
             {
