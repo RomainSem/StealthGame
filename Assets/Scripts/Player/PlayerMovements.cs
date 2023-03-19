@@ -47,7 +47,6 @@ public class PlayerMovements : MonoBehaviour
         if (Input.GetButtonDown("Jump") && IsGrounded)
         {
             IsJumping = true;
-            //Jump();
         }
         Run();
         Sneak();

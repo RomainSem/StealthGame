@@ -26,7 +26,7 @@ public class PlayerDetected : MonoBehaviour
     {
         if (other.gameObject.tag == "CameraCone")
         {
-            if (!IsPlayerVisible)
+            if (IsRaycastHittingPlayer)
             {
                 IsDetected = true;
             }
@@ -47,10 +47,11 @@ public class PlayerDetected : MonoBehaviour
             {
                 Destroy(Shadow);
             }
-            if (IsPlayerVisible)
+            if (IsRaycastHittingPlayer)
             {
                 Shadow = Instantiate(_playerShadow, transform.position, Quaternion.identity);
             }
+            IsDetected = false;
             _cameraLight.color = Color.white;
         }
     }
@@ -60,11 +61,11 @@ public class PlayerDetected : MonoBehaviour
 
     #region Private & Protected
 
-    bool _isPlayerVisible;
+    bool _isRaycastHittingPlayer;
     bool _isDetected;
     GameObject _shadow;
 
-    public bool IsPlayerVisible { get => _isPlayerVisible; set => _isPlayerVisible = value; }
+    public bool IsRaycastHittingPlayer { get => _isRaycastHittingPlayer; set => _isRaycastHittingPlayer = value; }
     public bool IsDetected { get => _isDetected; set => _isDetected = value; }
     public GameObject Shadow { get => _shadow; private set => _shadow = value; }
     public Light CameraLight { get => _cameraLight; set => _cameraLight = value; }

@@ -24,7 +24,7 @@ public class Hesitating : StateMachineBehaviour
         if (_playerDetectedScript.IsDetected)
         {
             _enemy.transform.LookAt(_player.transform.position);
-            _playerDetectedScript.IsPlayerVisible = true;
+            _playerDetectedScript.IsRaycastHittingPlayer = true;
             timer = 10f;
         }
 
@@ -38,14 +38,14 @@ public class Hesitating : StateMachineBehaviour
                 if (timer >= 1.5f)
                 {
                     _enemy.transform.LookAt(_player.transform.position);
-                    _playerDetectedScript.IsPlayerVisible = true;
+                    _playerDetectedScript.IsRaycastHittingPlayer = true;
                 }
             }
             else if (hit.collider.gameObject.tag == "Ground")
             {
                 timer = 0f;
-                _playerDetectedScript.IsPlayerVisible = false;
-                animator.SetBool("IsPlayerVisible", _playerDetectedScript.IsPlayerVisible);
+                _playerDetectedScript.IsRaycastHittingPlayer = false;
+                animator.SetBool("IsPlayerVisible", _playerDetectedScript.IsRaycastHittingPlayer);
             }
 
             animator.SetFloat("TimerToStartPursuit", timer);

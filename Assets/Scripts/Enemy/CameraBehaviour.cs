@@ -61,15 +61,22 @@ public class CameraBehaviour : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, _player.transform.position - transform.position, out hit))
         {
-            if (hit.collider.gameObject.tag == "Player" && _playerDetectedScript.IsDetected)
+            if (hit.collider.gameObject.tag == "Player"/* && _playerDetectedScript.IsDetected*/)
             {
-                _playerDetectedScript.IsPlayerVisible = true;
-                _playerDetectedScript.CameraLight.color = Color.red;
+                _playerDetectedScript.IsRaycastHittingPlayer = true;
+                if (_playerDetectedScript.IsDetected)
+                {
+                    _playerDetectedScript.CameraLight.color = Color.red;
+                }
             }
             else if (hit.collider.gameObject.tag == "Ground")
             {
                 _playerDetectedScript.CameraLight.color = Color.white;
-                _playerDetectedScript.IsPlayerVisible = false;
+                _playerDetectedScript.IsRaycastHittingPlayer = false;
+                if (!_playerDetectedScript.IsDetected)
+                {
+                    _playerDetectedScript.CameraLight.color = Color.white;
+                }
             }
         }
 
@@ -79,7 +86,7 @@ public class CameraBehaviour : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Vector3 directionToPlayer = _player.transform.position - transform.position;
-        Gizmos.DrawLine(transform.position, transform.position +  directionToPlayer);
+        Gizmos.DrawLine(transform.position, transform.position + directionToPlayer);
     }
 
     #endregion

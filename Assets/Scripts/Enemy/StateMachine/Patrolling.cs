@@ -34,7 +34,7 @@ public class Patrolling : StateMachineBehaviour
         }
         if (_playerDetectedScript != null)
         {
-            animator.SetBool("IsPlayerVisible", _playerDetectedScript.IsPlayerVisible);
+            animator.SetBool("IsPlayerVisible", _playerDetectedScript.IsRaycastHittingPlayer);
         }
     }
 
