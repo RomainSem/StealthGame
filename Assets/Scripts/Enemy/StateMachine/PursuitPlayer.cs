@@ -29,7 +29,7 @@ public class PursuitPlayer : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
-        if (_playerDetectedScript.IsDetected)
+        if (_playerDetectedScript.IsDetectedByCam)
         {
             if (_shadow != null)
             {
@@ -53,7 +53,7 @@ public class PursuitPlayer : StateMachineBehaviour
         RaycastHit hit;
         if (Physics.Raycast(_enemy.transform.position, _player.transform.position - _enemy.transform.position, out hit))
         {
-            if (hit.collider.gameObject.tag == "Player" && _playerDetectedScript.IsDetected)
+            if (hit.collider.gameObject.tag == "Player" && _playerDetectedScript.IsDetectedByEnemy)
             {
                 _playerDetectedScript.IsEnemyRayHittingPlayer = true;
                 _enemy.transform.LookAt(_player.transform.position);
