@@ -60,25 +60,21 @@ public class CameraBehaviour : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, _player.transform.position - transform.position, out hit))
         {
-            if (hit.collider.gameObject.tag == "Player"/* && _playerDetectedScript.IsDetected*/)
-            {
-                _playerDetectedScript.IsCamRayHittingPlayer = true;
-                if (_playerDetectedScript.IsDetectedByCam)
-                {
-                    _playerDetectedScript.CameraLight.color = Color.red;
-                }
-                else if (_playerDetectedScript.IsDetectedByCam)
-                {
-
-                }
-            }
-            else if (hit.collider.gameObject.tag == "Ground")
+            if (hit.collider.gameObject.tag == "Ground")
             {
                 _playerDetectedScript.CameraLight.color = Color.white;
                 _playerDetectedScript.IsCamRayHittingPlayer = false;
                 if (!_playerDetectedScript.IsDetectedByCam)
                 {
                     _playerDetectedScript.CameraLight.color = Color.white;
+                }
+            }
+            else if (hit.collider.gameObject.tag == "Player"/* && _playerDetectedScript.IsDetected*/)
+            {
+                _playerDetectedScript.IsCamRayHittingPlayer = true;
+                if (_playerDetectedScript.IsDetectedByCam)
+                {
+                    _playerDetectedScript.CameraLight.color = Color.red;
                 }
             }
         }
