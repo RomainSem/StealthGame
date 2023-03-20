@@ -6,15 +6,12 @@ using UnityEngine.AI;
 
 public class Hesitating : StateMachineBehaviour
 {
-    private void Awake()
-    {
-        _player = GameObject.FindGameObjectWithTag("Player");
-        _playerDetectedScript = _player.GetComponent<PlayerDetected>();
-    }
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        _player = GameObject.FindGameObjectWithTag("Player");
+        _playerDetectedScript = _player.GetComponent<PlayerDetected>();
         _enemy = animator.gameObject;
     }
 

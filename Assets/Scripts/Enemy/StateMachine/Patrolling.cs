@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Patrolling : StateMachineBehaviour
 {
-    private void Awake()
-    {
-        _playerDetectedScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDetected>();
-    }
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        _playerDetectedScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDetected>();
         _enemy = animator.gameObject;
         _patrolEnemyScript = _enemy.GetComponent<PatrolEnemy>();
         _agent = _enemy.GetComponent<NavMeshAgent>();

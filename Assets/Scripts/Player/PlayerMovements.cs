@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 //RequireComponent(typeof(Rigidbody));
 public class PlayerMovements : MonoBehaviour
@@ -210,7 +207,7 @@ public class PlayerMovements : MonoBehaviour
 
     public bool IsGrounded { get => isGrounded; private set => isGrounded = value; }
     public Vector3 Direction { get => _direction; private set => _direction = value; }
-    public bool IsJumping { get => _isJumping; private set => _isJumping = value; }
+    public bool IsJumping { get => _isJumping;  set => _isJumping = value; }
     public bool IsSneaking { get => _isSneaking; private set => _isSneaking = value; }
     public bool IsRunning { get => _isRunning; set => _isRunning = value; }
 
